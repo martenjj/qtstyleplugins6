@@ -6,6 +6,12 @@
 project(qtstyleplugins6)
 
 #########################################################################
+#  Dependencies								#
+#########################################################################
+
+find_package(GTK2 2.0 COMPONENTS gtk)
+
+#########################################################################
 #  The shared headers and static library				#
 #########################################################################
 
@@ -18,4 +24,6 @@ add_subdirectory(shared)
 add_subdirectory(plastique)
 add_subdirectory(motif)
 add_subdirectory(cleanlooks)
-add_subdirectory(gtk2)
+if (GTK2_FOUND)
+  add_subdirectory(gtk2)
+endif (GTK2_FOUND)

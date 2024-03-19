@@ -5,8 +5,6 @@
 
 project(qtstyleplugins6)
 
-find_package(GTK2 2.0 REQUIRED gtk)
-
 set(gtk2_SRCS plugin.cpp qgtk2painter.cpp qgtkpainter.cpp qgtkstyle.cpp qgtkstyle_p.cpp plugin.cpp)
 qt_add_plugin(gtk2 CLASS_NAME QGtk2Style ${gtk2_SRCS})
 include_directories(${GTK2_INCLUDE_DIRS})
