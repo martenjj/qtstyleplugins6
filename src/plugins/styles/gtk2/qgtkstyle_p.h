@@ -67,48 +67,48 @@ public:
 
     ~QGtkStyle();
 
-    QPalette standardPalette() const Q_DECL_OVERRIDE;
+    QPalette standardPalette() const override;
 
     void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
-                       QPainter *painter, const QWidget *widget) const Q_DECL_OVERRIDE;
+                       QPainter *painter, const QWidget *widget) const override;
     void drawControl(ControlElement control, const QStyleOption *option,
-                     QPainter *painter, const QWidget *widget) const Q_DECL_OVERRIDE;
+                     QPainter *painter, const QWidget *widget) const override;
     void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option,
-                            QPainter *painter, const QWidget *widget) const Q_DECL_OVERRIDE;
+                            QPainter *painter, const QWidget *widget) const override;
     void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment,
-                        const QPixmap &pixmap) const Q_DECL_OVERRIDE;
+                        const QPixmap &pixmap) const override;
     void drawItemText(QPainter *painter, const QRect &rect, int alignment, const QPalette &pal,
-                      bool enabled, const QString& text, QPalette::ColorRole textRole) const Q_DECL_OVERRIDE;
+                      bool enabled, const QString& text, QPalette::ColorRole textRole) const override;
 
-    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
-                    const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr,
+                    const QWidget *widget = nullptr) const override;
     int styleHint(StyleHint hint, const QStyleOption *option,
-                  const QWidget *widget, QStyleHintReturn *returnData) const Q_DECL_OVERRIDE;
+                  const QWidget *widget, QStyleHintReturn *returnData) const override;
 
     QStyle::SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-                              const QPoint &pt, const QWidget *w) const Q_DECL_OVERRIDE;
+                              const QPoint &pt, const QWidget *w) const override;
 
     QRect subControlRect(ComplexControl control, const QStyleOptionComplex *option,
-                         SubControl subControl, const QWidget *widget) const Q_DECL_OVERRIDE;
-    QRect subElementRect(SubElement sr, const QStyleOption *opt, const QWidget *w) const Q_DECL_OVERRIDE;
-    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const Q_DECL_OVERRIDE;
+                         SubControl subControl, const QWidget *widget) const override;
+    QRect subElementRect(SubElement sr, const QStyleOption *opt, const QWidget *w) const override;
+    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const override;
 
 
     QSize sizeFromContents(ContentsType type, const QStyleOption *option,
-                           const QSize &size, const QWidget *widget) const Q_DECL_OVERRIDE;
-    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = 0,
-                       const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                           const QSize &size, const QWidget *widget) const override;
+    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
+                       const QWidget *widget = nullptr) const override;
     QPixmap standardPixmap(StandardPixmap sp, const QStyleOption *option,
-                           const QWidget *widget) const Q_DECL_OVERRIDE;
+                           const QWidget *widget) const override;
     QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
-                                const QStyleOption *opt) const Q_DECL_OVERRIDE;
+                                const QStyleOption *opt) const override;
 
-    void polish(QWidget *widget) Q_DECL_OVERRIDE;
-    void polish(QApplication *app) Q_DECL_OVERRIDE;
-    void polish(QPalette &palette) Q_DECL_OVERRIDE;
+    void polish(QWidget *widget) override;
+    void polish(QApplication *app) override;
+    void polish(QPalette &palette) override;
 
-    void unpolish(QWidget *widget) Q_DECL_OVERRIDE;
-    void unpolish(QApplication *app) Q_DECL_OVERRIDE;
+    void unpolish(QWidget *widget) override;
+    void unpolish(QApplication *app) override;
 };
 
 QT_END_NAMESPACE
