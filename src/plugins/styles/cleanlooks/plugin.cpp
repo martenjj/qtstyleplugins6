@@ -50,14 +50,14 @@ class QCleanlooksStylePlugin : public QStylePlugin
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QStyleFactoryInterface" FILE "cleanlooks.json")
 
 public:
-    QStyle *create(const QString &key);
+    QStyle *create(const QString &key) override;
 };
 
 QStyle *QCleanlooksStylePlugin::create(const QString &key)
 {
     if (key == "cleanlooks")
         return new QCleanlooksStyle;
-    return 0;
+    return nullptr;
 }
 
 QT_END_NAMESPACE

@@ -45,8 +45,6 @@
 #include <QtWidgets/qproxystyle.h>
 #include <QtCore/qelapsedtimer.h>
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
 class QProgressBar;
@@ -59,46 +57,46 @@ public:
     QCleanlooksStyle();
     ~QCleanlooksStyle();
 
-    QPalette standardPalette () const Q_DECL_OVERRIDE;
+    QPalette standardPalette () const override;
     void drawPrimitive(PrimitiveElement elem,
                         const QStyleOption *option,
-                        QPainter *painter, const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                        QPainter *painter, const QWidget *widget = nullptr) const override;
     void drawControl(ControlElement ce, const QStyleOption *option, QPainter *painter,
-                                const QWidget *widget) const Q_DECL_OVERRIDE;
-    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                                const QWidget *widget) const override;
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
     void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option,
-                            QPainter *painter, const QWidget *widget) const Q_DECL_OVERRIDE;
-    QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                            QPainter *painter, const QWidget *widget) const override;
+    QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
     QSize sizeFromContents(ContentsType type, const QStyleOption *option,
-                           const QSize &size, const QWidget *widget) const Q_DECL_OVERRIDE;
+                           const QSize &size, const QWidget *widget) const override;
     SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-                               const QPoint &pt, const QWidget *w = 0) const Q_DECL_OVERRIDE;
+                               const QPoint &pt, const QWidget *w = nullptr) const override;
     QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
-                         SubControl sc, const QWidget *widget) const Q_DECL_OVERRIDE;
+                         SubControl sc, const QWidget *widget) const override;
     QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
-                                        const QStyleOption *opt) const Q_DECL_OVERRIDE;
-    int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0,
-                  QStyleHintReturn *returnData = 0) const Q_DECL_OVERRIDE;
-    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const Q_DECL_OVERRIDE;
-    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = 0,
-                       const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                                        const QStyleOption *opt) const override;
+    int styleHint(StyleHint hint, const QStyleOption *option = nullptr, const QWidget *widget = nullptr,
+                  QStyleHintReturn *returnData = nullptr) const override;
+    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const override;
+    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
+                       const QWidget *widget = nullptr) const override;
     QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt,
-                           const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                           const QWidget *widget = nullptr) const override;
     void drawItemPixmap(QPainter *painter, const QRect &rect,
-                        int alignment, const QPixmap &pixmap) const Q_DECL_OVERRIDE;
+                        int alignment, const QPixmap &pixmap) const override;
     void drawItemText(QPainter *painter, const QRect &rect,
                               int flags, const QPalette &pal, bool enabled,
-                              const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const Q_DECL_OVERRIDE;
-    void polish(QWidget *widget) Q_DECL_OVERRIDE;
-    void polish(QApplication *app) Q_DECL_OVERRIDE;
-    void polish(QPalette &pal) Q_DECL_OVERRIDE;
-    void unpolish(QWidget *widget) Q_DECL_OVERRIDE;
-    void unpolish(QApplication *app) Q_DECL_OVERRIDE;
+                              const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const override;
+    void polish(QWidget *widget) override;
+    void polish(QApplication *app) override;
+    void polish(QPalette &pal) override;
+    void unpolish(QWidget *widget) override;
+    void unpolish(QApplication *app) override;
 
 
 protected:
-    bool event(QEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
+    bool event(QEvent *event) override;
+    bool eventFilter(QObject *o, QEvent *e) override;
     void startProgressAnimation(QObject *o, QProgressBar *bar);
     void stopProgressAnimation(QObject *o, QProgressBar *bar);
 
@@ -110,7 +108,5 @@ private:
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QCLEANLOOKSSTYLE_H
