@@ -45,8 +45,6 @@
 
 #include "qmotifstyle.h"
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
 class QCDEStyle : public QMotifStyle
@@ -56,19 +54,17 @@ public:
     explicit QCDEStyle(bool useHighlightCols = false);
     virtual ~QCDEStyle();
 
-    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
-                    const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr,
+                    const QWidget *widget = nullptr) const override;
     void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p,
-                     const QWidget *w = 0) const Q_DECL_OVERRIDE;
+                     const QWidget *w = nullptr) const override;
     void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
-                       const QWidget *w = 0) const Q_DECL_OVERRIDE;
-    QPalette standardPalette() const Q_DECL_OVERRIDE;
-    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *opt = 0,
-                       const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                       const QWidget *w = nullptr) const override;
+    QPalette standardPalette() const override;
+    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *opt = nullptr,
+                       const QWidget *widget = nullptr) const override;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QCDESTYLE_H

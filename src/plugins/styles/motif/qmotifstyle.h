@@ -43,10 +43,8 @@
 #define QMOTIFSTYLE_H
 
 #include <QtWidgets/qcommonstyle.h>
-#include <QtCore/qdatetime.h>
+#include <QtCore/qelapsedtimer.h>
 #include <QtCore/qpointer.h>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
@@ -65,47 +63,47 @@ public:
     void setUseHighlightColors(bool);
     bool useHighlightColors() const;
 
-    void polish(QPalette&) Q_DECL_OVERRIDE;
-    void polish(QWidget*) Q_DECL_OVERRIDE;
-    void unpolish(QWidget*) Q_DECL_OVERRIDE;
-    void polish(QApplication*) Q_DECL_OVERRIDE;
-    void unpolish(QApplication*) Q_DECL_OVERRIDE;
+    void polish(QPalette&) override;
+    void polish(QWidget*) override;
+    void unpolish(QWidget*) override;
+    void polish(QApplication*) override;
+    void unpolish(QApplication*) override;
 
     void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
-                        const QWidget *w = 0) const Q_DECL_OVERRIDE;
+                        const QWidget *w = nullptr) const override;
 
     void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p,
-                      const QWidget *w = 0) const Q_DECL_OVERRIDE;
+                      const QWidget *w = nullptr) const override;
 
     void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
-                            const QWidget *w = 0) const Q_DECL_OVERRIDE;
+                            const QWidget *w = nullptr) const override;
 
     QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
-                         SubControl sc, const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                         SubControl sc, const QWidget *widget = nullptr) const override;
 
-    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
-                     const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr,
+                     const QWidget *widget = nullptr) const override;
 
     QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
-                           const QSize &contentsSize, const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                           const QSize &contentsSize, const QWidget *widget = nullptr) const override;
 
-    QRect subElementRect(SubElement r, const QStyleOption *opt,const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+    QRect subElementRect(SubElement r, const QStyleOption *opt,const QWidget *widget = nullptr) const override;
 
     QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt,
-                           const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+                           const QWidget *widget = nullptr) const override;
 
-    int styleHint(StyleHint hint, const QStyleOption *opt = 0, const QWidget *widget = 0,
-                  QStyleHintReturn *returnData = 0) const Q_DECL_OVERRIDE;
+    int styleHint(StyleHint hint, const QStyleOption *opt = nullptr, const QWidget *widget = nullptr,
+                  QStyleHintReturn *returnData = nullptr) const override;
 
-    bool event(QEvent *) Q_DECL_OVERRIDE;
-    QPalette standardPalette() const Q_DECL_OVERRIDE;
-    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *opt = 0,
-                       const QWidget *widget = 0) const Q_DECL_OVERRIDE;
+    bool event(QEvent *) override;
+    QPalette standardPalette() const override;
+    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *opt = nullptr,
+                       const QWidget *widget = nullptr) const override;
 
 protected:
     QPointer<QFocusFrame> focus;
-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) override;
+    bool eventFilter(QObject *o, QEvent *e) override;
     void startProgressAnimation(QProgressBar *bar);
     void stopProgressAnimation(QProgressBar *bar);
 
@@ -114,7 +112,7 @@ private:
     QList<QProgressBar *> bars;
     int animationFps;
     int animateTimer;
-    QTime startTime;
+    QElapsedTimer startTime;
     int animateStep;
 
 protected:
@@ -122,7 +120,5 @@ protected:
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QMOTIFSTYLE_H

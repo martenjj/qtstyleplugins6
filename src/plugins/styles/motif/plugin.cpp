@@ -51,7 +51,7 @@ class QMotifStylePlugin : public QStylePlugin
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QStyleFactoryInterface" FILE "motif.json")
 
 public:
-    QStyle *create(const QString &key);
+    QStyle *create(const QString &key) override;
 };
 
 QStyle *QMotifStylePlugin::create(const QString &key)
@@ -60,7 +60,7 @@ QStyle *QMotifStylePlugin::create(const QString &key)
         return new QMotifStyle;
     if (key == "cde")
         return new QCDEStyle;
-    return 0;
+    return nullptr;
 }
 
 QT_END_NAMESPACE

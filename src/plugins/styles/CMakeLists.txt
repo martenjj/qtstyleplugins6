@@ -16,3 +16,4 @@ add_subdirectory(shared)
 #########################################################################
 
 add_subdirectory(plastique)
+add_subdirectory(motif)
