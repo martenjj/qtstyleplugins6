@@ -50,14 +50,14 @@ class QPlastiqueStylePlugin : public QStylePlugin
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QStyleFactoryInterface" FILE "plastique.json")
 
 public:
-    QStyle *create(const QString &key);
+    QStyle *create(const QString &key) override;
 };
 
 QStyle *QPlastiqueStylePlugin::create(const QString &key)
 {
     if (key == "plastique")
         return new QPlastiqueStyle;
-    return 0;
+    return nullptr;
 }
 
 QT_END_NAMESPACE
