@@ -5500,7 +5500,7 @@ int QPlastiqueStyle::pixelMetric(PixelMetric metric, const QStyleOption *option,
         return 2;
     case PM_LayoutHorizontalSpacing:
     case PM_LayoutVerticalSpacing:
-        return -1;  // rely on layoutHorizontalSpacing()
+        return 4;  // cannot now rely on layoutHorizontalSpacing()
     case PM_LayoutLeftMargin:
     case PM_LayoutTopMargin:
     case PM_LayoutRightMargin:
