@@ -51,11 +51,11 @@
 #include <QtCore/QHash>
 #include <QtCore/QUrl>
 #include <QtCore/QDebug>
+#include <QtCore/QLibrary>
 
 #include "qgtk2painter_p.h"
 #include <private/qapplication_p.h>
 #include <private/qiconloader_p.h>
-#include <qpa/qplatformfontdatabase.h>
 
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QStyle>
@@ -508,7 +508,6 @@ void QGtkStyleUpdateScheduler::updateTheme()
       if (oldTheme != QGtkStylePrivate::getThemeName()) {
           oldTheme = QGtkStylePrivate::getThemeName();
           QPalette newPalette = qApp->style()->standardPalette();
-          QApplicationPrivate::setSystemPalette(newPalette);
           QApplication::setPalette(newPalette);
           if (!QGtkStylePrivate::instances.isEmpty()) {
               QGtkStylePrivate::instances.last()->initGtkWidgets();
@@ -516,7 +515,7 @@ void QGtkStyleUpdateScheduler::updateTheme()
           }
           QList<QWidget*> widgets = QApplication::allWidgets();
           // Notify all widgets that size metrics might have changed
-          foreach (QWidget *widget, widgets) {
+          for (QWidget *widget : std::as_const(widgets)) {
               QEvent e(QEvent::StyleChange);
               QApplication::sendEvent(widget, &e);
           }
@@ -550,7 +549,21 @@ QFont QGtkStylePrivate::getThemeFont()
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
         const int weight = pango_font_description_get_weight(gtk_font);
-        font.setWeight(QPlatformFontDatabase::weightFromInteger(weight));
+
+        //font.setWeight(QPlatformFontDatabase::weightFromInteger(weight));
+        // In Qt 5 but not in Qt 6, copied from
+        // https://codebrowser.dev/qt5/qtbase/src/gui/text/qplatformfontdatabase.cpp.html
+        QFont::Weight fdbw = QFont::Normal;
+        if (weight < 150) fdbw = QFont::Thin;
+        else if (weight < 250) fdbw = QFont::ExtraLight;
+        else if (weight < 350) fdbw = QFont::Light;
+        else if (weight < 450) fdbw = QFont::Normal;
+        else if (weight < 550) fdbw = QFont::Medium;
+        else if (weight < 650) fdbw = QFont::DemiBold;
+        else if (weight < 750) fdbw = QFont::Bold;
+        else if (weight < 850) fdbw = QFont::ExtraBold;
+        else fdbw = QFont::Black;
+        font.setWeight(fdbw);
 #else
         int weight = pango_font_description_get_weight(gtk_font);
         if (weight >= PANGO_WEIGHT_HEAVY)

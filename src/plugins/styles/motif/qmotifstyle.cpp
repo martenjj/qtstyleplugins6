@@ -110,7 +110,7 @@ static const int motifCheckMarkSpace    = 16;
   highlighting, which is a simple inversion between the base and the
   text color.
 */
-QMotifStyle::QMotifStyle(bool useHighlightCols) : QCommonStyle(), focus(0),
+QMotifStyle::QMotifStyle(bool useHighlightCols) : QCommonStyle(), focus(nullptr),
     highlightCols(useHighlightCols), animationFps(25), animateTimer(0), animateStep(0),
     spinboxHCoeff(6)
 {
@@ -200,7 +200,7 @@ void QMotifStyle::timerEvent(QTimerEvent *event)
     if (event->timerId() == animateTimer) {
         Q_ASSERT(animationFps > 0);
         animateStep = startTime.elapsed() / (1000 / animationFps);
-        foreach (QProgressBar *bar, bars) {
+        for (QProgressBar *bar : std::as_const(bars)) {
             if ((bar->minimum() == 0 && bar->maximum() == 0))
                 bar->update();
         }
@@ -320,7 +320,7 @@ void QMotifStyle::unpolish(QApplication* a)
 static void rot(QPolygon& a, int n)
 {
     QPolygon r(a.size());
-    for (int i = 0; i < (int)a.size(); i++) {
+    for (int i = 0; i < static_cast<int>(a.size()); i++) {
         switch (n) {
         case 1: r.setPoint(i,-a[i].y(),a[i].x()); break;
         case 2: r.setPoint(i,-a[i].x(),-a[i].y()); break;
@@ -386,22 +386,22 @@ void QMotifStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QP
                 // }
             }
         } else {
-            int w = opt->rect.width();
-            if (w > 6) {
+            int wid = opt->rect.width();
+            if (wid > 6) {
                 if (opt->state & State_On)
-                    p->fillRect(1, 1, w - 2, 9, opt->palette.highlight());
-                QPolygon a(2 * ((w-6)/3));
+                    p->fillRect(1, 1, wid - 2, 9, opt->palette.highlight());
+                QPolygon a(2 * ((wid-6)/3));
 
-                int x = 3 + (w%3)/2;
+                int x = 3 + (wid % 3)/2;
                 p->setPen(dark);
-                p->drawLine(1, 8, w-2, 8);
+                p->drawLine(1, 8, wid-2, 8);
                 for (i=0; 2*i < a.size(); ++i) {
                     a.setPoint(2*i, x+1+3*i, 6);
                     a.setPoint(2*i+1, x+2+3*i, 3);
                 }
                 p->drawPoints(a);
                 p->setPen(light);
-                p->drawLine(1, 9, w-2, 9);
+                p->drawLine(1, 9, wid-2, 9);
                 for (i=0; 2*i < a.size(); ++i) {
                     a.setPoint(2*i, x+3*i, 5);
                     a.setPoint(2*i+1, x+1+3*i, 2);
@@ -648,14 +648,13 @@ void QMotifStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QP
         bBot.translate(rect.x(), rect.y());
 
         const QColor *cols[5];
+        cols[0] = nullptr;
         if (opt->state & State_Enabled) {
-            cols[0] = 0;
             cols[1] = &opt->palette.button().color();
             cols[2] = &opt->palette.mid().color();
             cols[3] = &opt->palette.light().color();
             cols[4] = &opt->palette.dark().color();
         } else {
-            cols[0] = 0;
             cols[1] = &opt->palette.mid().color();
             cols[2] = &opt->palette.mid().color();
             cols[3] = &opt->palette.mid().color();
@@ -746,10 +745,10 @@ void QMotifStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QP
                 int pnt;
                 p->setPen(opt->palette.highlightedText().color());
                 QPoint offset(1,1);
-                for (pnt = 0; pnt < (int)a.size(); pnt++)
+                for (pnt = 0; pnt < static_cast<int>(a.size()); pnt++)
                     a[pnt] += offset;
                 p->drawPolyline(a);
-                for (pnt = 0; pnt < (int)a.size(); pnt++)
+                for (pnt = 0; pnt < static_cast<int>(a.size()); pnt++)
                     a[pnt] -= offset;
             }
             p->setPen(opt->palette.text().color());
@@ -765,7 +764,7 @@ void QMotifStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QP
     case PE_IndicatorProgressChunk:
         {
             const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt);
-            bool vertical = pb && (pb->orientation == Qt::Vertical);
+            bool vertical = pb!=nullptr && !(pb->state & QStyle::State_Horizontal);
             if (!vertical) {
                 p->fillRect(opt->rect.x(), opt->rect.y(), opt->rect.width(),
                             opt->rect.height(), opt->palette.brush(QPalette::Highlight));
@@ -870,7 +869,7 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
     case CE_PushButtonBevel:
         if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
             int diw, x1, y1, x2, y2;
-            p->setPen(opt->palette.foreground().color());
+            p->setPen(opt->palette.windowText().color());
             p->setBrush(QBrush(opt->palette.button().color(), Qt::NoBrush));
             diw = proxy()->pixelMetric(PM_ButtonDefaultIndicator);
             opt->rect.getCoords(&x1, &y1, &x2, &y2);
@@ -928,7 +927,7 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
 
                 p->fillRect(opt->rect.adjusted(default_frame, default_frame,
                                                -default_frame, -default_frame),
-                                               tab->palette.background());
+                                               tab->palette.window());
 
                 if (tab->shape == QTabBar::RoundedWest) {
                     tabDark = opt->palette.light().color();
@@ -966,8 +965,8 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
                 if (opt->state & State_Selected) {
                     p->fillRect(QRect(tabRect.left()+1, tabRect.bottom()-frame_offset,
                                       tabRect.width()-3, 2),
-                                tab->palette.brush(QPalette::Active, QPalette::Background));
-                    p->setPen(tab->palette.background().color());
+                                tab->palette.brush(QPalette::Active, QPalette::Window));
+                    p->setPen(tab->palette.window().color());
                     p->drawLine(tabRect.left()+1, tabRect.bottom(),
                                 tabRect.left()+1, tabRect.top()+2);
                     p->setPen(tabLight);
@@ -1014,7 +1013,7 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
         if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
             QTransform oldMatrix = p->transform();
             QRect rect = pb->rect;
-            bool vertical = (pb->orientation == Qt::Vertical);
+            bool vertical = !(pb->state & QStyle::State_Horizontal);
             bool invert = pb->invertedAppearance;
             bool bottomToTop = pb->bottomToTop;
             if (vertical) {
@@ -1101,7 +1100,7 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
                     proxy()->drawItemText(p, menuitem->rect.adjusted(10, 0, -5, 0), Qt::AlignLeft | Qt::AlignVCenter,
                                  menuitem->palette, menuitem->state & State_Enabled, menuitem->text,
                                  QPalette::Text);
-                    textWidth = menuitem->fontMetrics.width(menuitem->text) + 10;
+                    textWidth = menuitem->fontMetrics.horizontalAdvance(menuitem->text) + 10;
                     y += menuitem->fontMetrics.height() / 2;
                     p->setFont(oldFont);
                 }
@@ -1186,7 +1185,7 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
             int xm = motifItemFrame + maxpmw + motifItemHMargin;
 
             vrect = visualRect(opt->direction, opt->rect,
-                               QRect(x+xm, y+motifItemVMargin, w-xm-menuitem->tabWidth,
+                               QRect(x+xm, y+motifItemVMargin, w-xm-menuitem->reservedShortcutWidth,
                                      h-2*motifItemVMargin));
             xvis = vrect.x();
 
@@ -1200,17 +1199,17 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
                 p->setFont(menuitem->font);
                 if (t >= 0) {                         // draw tab text
                     QRect vr = visualRect(opt->direction, opt->rect,
-                                          QRect(x+w-menuitem->tabWidth-motifItemHMargin-motifItemFrame,
-                                                y+motifItemVMargin, menuitem->tabWidth,
+                                          QRect(x+w-menuitem->reservedShortcutWidth-motifItemHMargin-motifItemFrame,
+                                                y+motifItemVMargin, menuitem->reservedShortcutWidth,
                                                 h-2*motifItemVMargin));
                     int xv = vr.x();
-                    QRect tr(xv, y+m, menuitem->tabWidth, h-2*m);
+                    QRect tr(xv, y+m, menuitem->reservedShortcutWidth, h-2*m);
                     p->drawText(tr, text_flags, s.mid(t+1));
                     if (!(opt->state & State_Enabled) && proxy()->styleHint(SH_DitherDisabledText))
                         p->fillRect(tr, QBrush(p->background().color(), Qt::Dense5Pattern));
                     s = s.left(t);
                 }
-                QRect tr(xvis, y+m, w - xm - menuitem->tabWidth + 1, h-2*m);
+                QRect tr(xvis, y+m, w - xm - menuitem->reservedShortcutWidth + 1, h-2*m);
                 p->drawText(tr, text_flags, s.left(t));
                 p->setFont(oldFont);
                 if (!(opt->state & State_Enabled) && proxy()->styleHint(SH_DitherDisabledText))
@@ -1273,7 +1272,7 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
     case CE_ProgressBarContents:
         if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
             QRect rect = pb->rect;
-            bool vertical = (pb->orientation == Qt::Vertical);
+            bool vertical = !(pb->state & QStyle::State_Horizontal);
             bool inverted = pb->invertedAppearance;
 
             QTransform m;
@@ -1285,7 +1284,7 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
 
             QPalette pal2 = pb->palette;
             // Correct the highlight color if it is the same as the background
-            if (pal2.highlight() == pal2.background())
+            if (pal2.highlight() == pal2.window())
                 pal2.setColor(QPalette::Highlight, pb->palette.color(QPalette::Active,
                                                                      QPalette::Highlight));
             bool reverse = ((!vertical && (pb->direction == Qt::RightToLeft)) || vertical);
@@ -1313,7 +1312,7 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
         break; }
 }
 
-static int get_combo_extra_width(int h, int w, int *return_awh=0)
+static int get_combo_extra_width(int h, int w, int *return_awh = nullptr)
 {
     int awh,
         tmp;
@@ -1579,11 +1578,11 @@ void QMotifStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComple
                 p->drawLine(ar.x()+awh-1, sy+1, ar.x()+awh-1, sy+sh-1);
 
                 if ((cb->state & State_HasFocus) && (!focus || !focus->isVisible())) {
-                    QStyleOptionFocusRect focus;
-                    focus.QStyleOption::operator=(*opt);
-                    focus.rect = subElementRect(SE_ComboBoxFocusRect, opt, widget);
-                    focus.backgroundColor = opt->palette.button().color();
-                    proxy()->drawPrimitive(PE_FrameFocusRect, &focus, p, widget);
+                    QStyleOptionFocusRect focusRect;
+                    focusRect.QStyleOption::operator=(*opt);
+                    focusRect.rect = subElementRect(SE_ComboBoxFocusRect, opt, widget);
+                    focusRect.backgroundColor = opt->palette.button().color();
+                    proxy()->drawPrimitive(PE_FrameFocusRect, &focusRect, p, widget);
                 }
             }
 
@@ -1652,7 +1651,8 @@ int QMotifStyle::pixelMetric(PixelMetric pm, const QStyleOption *opt,
         break;
 
     case PM_SplitterWidth:
-        ret = qMax(10, QApplication::globalStrut().width());
+        //ret = qMax(10, QApplication::globalStrut().width());
+        ret = 10;
         break;
 
     case PM_SliderLength:
@@ -1746,7 +1746,7 @@ QMotifStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
             QSize bs;
             bs.setHeight(opt->rect.height()/2 - fw);
             bs.setWidth(qMin(bs.height() * 8 / 5, opt->rect.width() / 4)); // 1.6 -approximate golden mean
-            bs = bs.expandedTo(QApplication::globalStrut());
+            //bs = bs.expandedTo(QApplication::globalStrut());
             int y = fw + spinbox->rect.y();
             int x, lx, rx;
             x = spinbox->rect.x() + opt->rect.width() - fw - bs.width();
@@ -1981,7 +1981,7 @@ QMotifStyle::subElementRect(SubElement sr, const QStyleOption *opt, const QWidge
         if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
             int textw = 0;
             if (pb->textVisible)
-                textw = pb->fontMetrics.width(QLatin1String("100%")) + 6;
+                textw = pb->fontMetrics.horizontalAdvance(QLatin1String("100%")) + 6;
 
             if (pb->textAlignment == Qt::AlignLeft || pb->textAlignment == Qt::AlignCenter) {
                 rect = opt->rect;
@@ -2369,12 +2369,12 @@ QMotifStyle::standardPixmap(StandardPixmap standardPixmap, const QStyleOption *o
             xpm_data = question_xpm;
             break;
         default:
-            xpm_data = 0;
+            xpm_data = nullptr;
             break;
         }
         QPixmap pm;
         if (xpm_data) {
-            QImage image((const char **) xpm_data);
+            QImage image(static_cast<const char * const *>(xpm_data));
             // All that color looks ugly in Motif
             const QPalette &pal = QApplication::palette();
             switch (standardPixmap) {
@@ -2426,7 +2426,7 @@ bool QMotifStyle::event(QEvent *e)
         if (QWidget *focusWidget = QApplication::focusWidget()) {
 #ifndef QT_NO_GRAPHICSVIEW
             if (QGraphicsView *graphicsView = qobject_cast<QGraphicsView *>(focusWidget)) {
-                QGraphicsItem *focusItem = graphicsView->scene() ? graphicsView->scene()->focusItem() : 0;
+                QGraphicsItem *focusItem = graphicsView->scene() ? graphicsView->scene()->focusItem() : nullptr;
                 if (focusItem && focusItem->type() == QGraphicsProxyWidget::Type) {
                     QGraphicsProxyWidget *proxy = static_cast<QGraphicsProxyWidget *>(focusItem);
                     if (proxy->widget())
@@ -2439,11 +2439,11 @@ bool QMotifStyle::event(QEvent *e)
             focus->setWidget(focusWidget);
         } else {
             if (focus)
-                focus->setWidget(0);
+                focus->setWidget(nullptr);
         }
     } else if (e->type() == QEvent::FocusOut) {
         if (focus)
-            focus->setWidget(0);
+            focus->setWidget(nullptr);
     }
     return  QCommonStyle::event(e);
 }

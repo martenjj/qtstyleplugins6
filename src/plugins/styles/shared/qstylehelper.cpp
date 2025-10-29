@@ -82,7 +82,7 @@ bool isInstanceOf(QObject *obj, QAccessible::Role role)
 bool hasAncestor(QObject *obj, QAccessible::Role role)
 {
     bool found = false;
-    QObject *parent = obj ? obj->parent() : 0;
+    QObject *parent = obj ? obj->parent() : nullptr;
     while (parent && !found) {
         if (isInstanceOf(parent, role))
             found = true;
@@ -381,10 +381,10 @@ QColor backgroundColor(const QPalette &pal, const QWidget* widget)
 
 QWindow *styleObjectWindow(QObject *so)
 {
-    if (so)
+    if (so!=nullptr)
         return so->property("_q_styleObjectWindow").value<QWindow *>();
 
-    return 0;
+    return nullptr;
 }
 
 }
