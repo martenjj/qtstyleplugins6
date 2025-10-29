@@ -8,7 +8,7 @@ at https://code.qt.io/cgit/qt/qtstyleplugins.git and mirrored at
 https://github.com/qt/qtstyleplugins, but were never updated to be
 able to be built and used with Qt 6.
 
-The styles provided are Cleanlooks, Motif and Plastique.  If GTK+2
+The styles provided are Cleanlooks, Motif, CDE and Plastique.  If GTK+2
 libraries and include files are available then the GTK2 style can also
 be built.  The BB10 style has not yet been ported.
 
