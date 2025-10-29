@@ -63,7 +63,8 @@
 #include <private/qstyleanimation_p.h>
 #undef signals // Collides with GTK stymbols
 #include "qgtkpainter_p.h"
-#include <private/qstylehelper_p.h>
+#include "qstylehelper_p.h"
+#include "qstylecache_p.h"
 #include "qgtkstyle_p_p.h"
 
 QT_BEGIN_NAMESPACE
