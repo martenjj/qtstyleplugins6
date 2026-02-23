@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		Qt Style Plugins for Qt6			#
-#  Edit:		19-Mar-24					#
+#  Edit:		23-Feb-26					#
 #########################################################################
 
 project(qtstyleplugins6)
@@ -9,7 +9,9 @@ project(qtstyleplugins6)
 #  Dependencies								#
 #########################################################################
 
-find_package(GTK2 2.0 COMPONENTS gtk)
+if (BUILD_GTK2_STYLE)
+  find_package(GTK2 2.0 COMPONENTS gtk)
+endif ()
 
 #########################################################################
 #  The shared headers and static library				#
@@ -24,6 +26,9 @@ add_subdirectory(shared)
 add_subdirectory(plastique)
 add_subdirectory(motif)
 add_subdirectory(cleanlooks)
-if (GTK2_FOUND)
+if (BUILD_GTK2_STYLE AND GTK2_FOUND)
   add_subdirectory(gtk2)
-endif (GTK2_FOUND)
+endif ()
+if (BUILD_BB10_STYLE)
+  add_subdirectory(bb10style)
+endif ()

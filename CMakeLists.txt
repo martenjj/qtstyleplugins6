@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		Qt Style Plugins for Qt6			#
-#  Edit:		19-Mar-24					#
+#  Edit:		23-Feb-26					#
 #########################################################################
 #									#
 #  Style sources updated for Qt6 and adapted to build with ECM/CMake.	#
@@ -28,6 +28,13 @@ include(FeatureSummary)
 include(ECMSetupVersion)
 
 find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets)
+
+#########################################################################
+#  Options								#
+#########################################################################
+
+option(BUILD_GTK2_STYLE "Build the GTK2+ style" OFF)
+option(BUILD_BB10_STYLE "Build the BB10 style" OFF)
 
 #########################################################################
 #  Rigourousness							#
